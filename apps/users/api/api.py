@@ -12,17 +12,7 @@ def user_api_view(request):
     if request.method == 'GET':
         users = User.objects.all()
         users_serializer = UserSerializer(users, many = True)
-        test_data = {
-                'name' : 'Juan',
-                'email' : 'juanvarco3d@gmail.com'
-            }
-
-        test_name = TestUserSerializer(data = test_data, context = test_data)
-        if test_name.is_valid():
-            user_instance = test_name.save()
-            print(user_instance)
-            print('Pasó al validación')
-
+        
         return Response(users_serializer.data, status = status.HTTP_200_OK)
     #create
     elif request.method == 'POST':
@@ -32,6 +22,7 @@ def user_api_view(request):
         if user_serializer.is_valid():
             user_serializer.save()
             return Response(user_serializer.data, status = status.HTTP_201_CREATED)
+            
         return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
     
     
@@ -43,17 +34,22 @@ def user_detail_api_view(request, pk = None):
 
     #validation
     if user:
+
         #retrieve
         if request.method == 'GET':
             user_serializer = UserSerializer(user)
             return Response(user_serializer.data, status = status.HTTP_200_OK)
+
         #update
         elif request.method == 'PUT':
-            user_serializer = UserSerializer(user, data = request.data)
+            user_serializer = TestUserSerializer(user, data = request.data)
+
             if user_serializer.is_valid():
                 user_serializer.save()
                 return Response(user_serializer.data, status = status.HTTP_200_OK)
+
             return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
         #delete
         elif request.method == 'DELETE':
             user.delete()
