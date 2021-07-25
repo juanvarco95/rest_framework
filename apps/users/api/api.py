@@ -1,9 +1,10 @@
+from decimal import Context
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from apps.users.models import User
-from apps.users.api.serializers import UserSerializer
+from apps.users.api.serializers import UserSerializer, TestUserSerializer
 
 @api_view(['GET', 'POST'])
 def user_api_view(request):
@@ -11,6 +12,17 @@ def user_api_view(request):
     if request.method == 'GET':
         users = User.objects.all()
         users_serializer = UserSerializer(users, many = True)
+        test_data = {
+                'name' : 'Juan',
+                'email' : 'juanvarco3d@gmail.com'
+            }
+
+        test_name = TestUserSerializer(data = test_data, context = test_data)
+        if test_name.is_valid():
+            user_instance = test_name.save()
+            print(user_instance)
+            print('Pasó al validación')
+
         return Response(users_serializer.data, status = status.HTTP_200_OK)
     #create
     elif request.method == 'POST':
@@ -21,6 +33,8 @@ def user_api_view(request):
             user_serializer.save()
             return Response(user_serializer.data, status = status.HTTP_201_CREATED)
         return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+    
+    
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def user_detail_api_view(request, pk = None):
