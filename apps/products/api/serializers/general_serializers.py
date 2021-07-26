@@ -1,5 +1,5 @@
 from django.db import models
-from apps.products.models import MeasureUnit, CateroryProduct, Indicador
+from apps.products.models import MeasureUnit, CategoryProduct, Indicador
 
 from rest_framework import serializers
 
@@ -7,16 +7,16 @@ class MeasureUnitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MeasureUnit
-        exclude = ('state',)
+        exclude = ('state', 'created_date', 'modified_date', 'delete_date')
 
 class CategoryProductSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CateroryProduct
-        exclude = ('state',)
+        model = CategoryProduct
+        exclude = ('state', 'created_date', 'modified_date', 'delete_date')
 
 class IndicadorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Indicador
-        exclude = ('state', )
+        exclude = ('state', 'created_date', 'modified_date', 'delete_date')
