@@ -6,32 +6,32 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
-
-class TestUserSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length = 200)
-    email = serializers.EmailField()
-
-    def validate_name(self, value):
-        if value == '':
-            raise serializers.ValidationError('Ingrese algún valor en el campo')
-        return value
     
-    def validate_email(self, value):
-        if self.validate_name(self.context['name']) in value:
-            raise serializers.ValidationError('El nombre no puede estar en el correo')
-        return value
-
-    def validate(self, data):
-        print("Validación hecha correctamente")
-        return data
-
-    def create(self, validated_data):
-        print('Pasó por el create')
-        return User.objects.create(**validated_data)
-
+    def create(self, validate_data):
+        user = User(**validate_data)
+        user.set_password(validate_data['password'])
+        user.save()
+        return user
+    
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.email = validated_data.get('email', instance.email)
-        instance.save()
-        return instance 
+        updated_user = super().update(instance, validated_data)
+        updated_user.set_password(validated_data['password'])
+        updated_user.save()
+        return updated_user
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+
+
+
+    def to_representation(self, instance):
+        return {
+            'id' : instance['id'],
+            'nombre_usuario' : instance['name'],
+            'correo_electrónico' : instance['email'],
+            'contraseña' : instance['password'],
+        }
+
+
 
