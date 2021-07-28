@@ -1,7 +1,6 @@
 
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.forms.models import ModelChoiceField
 from simple_history.models import HistoricalRecords
 from apps.base.models import BaseModel
 
