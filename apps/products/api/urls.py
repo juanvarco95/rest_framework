@@ -5,9 +5,5 @@ from apps.products.api.views.product_views import ProductListCreateAPIView, Prod
 urlpatterns = [
     path('measure_unit/', MeasureUnitListAPIView.as_view(), name = 'measure_unit'),
     path('indicator/', IndicadorAPIView.as_view(), name = 'indicator'),
-    path('category_products/', CategoryProductsListAPIView.as_view(), name = 'category_products'),
-    path('product/', ProductListCreateAPIView.as_view(), name = 'product_create'),
-    path('product/retrieve_update_destroy/<int:pk>', ProductRetrieveUpdateDestroyAPIView.as_view(), name = 'product_retrieve_update_destroy'),
-   
     
 ]
